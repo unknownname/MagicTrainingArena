@@ -164,7 +164,7 @@ public class SkeletonScript extends LoopingScript {
         SceneObject GraveyardTeleport = SceneObjectQuery.newQuery().name("Graveyard Teleport").results().first();
         if(GraveyardTeleport != null)
         {
-            println(" Entering the Alchemists Portal: " + GraveyardTeleport.interact("Enter"));
+            println(" Entering the Graveyard Portal: " + GraveyardTeleport.interact("Enter"));
             Execution.delay(random.nextLong(1250,1750));
             botState = BotState.GRAVEYARD;
         }else if((player.getCoordinate().getRegionId() == 13462))
@@ -367,28 +367,36 @@ public class SkeletonScript extends LoopingScript {
         }
     }
 
-    Area graveyardarea = new Area.Rectangular(new Coordinate(3349,9636,0), new Coordinate(3356,9640,0));
+    Area graveyardarea = new Area.Rectangular(new Coordinate(3349,9636,1), new Coordinate(3356,9640,1));
     public long grabbones()
     {
 
-        SceneObject bones = SceneObjectQuery.newQuery().name("Bones").inside(graveyardarea).results().first();
+        SceneObject bones = SceneObjectQuery.newQuery().name("Bones").inside(graveyardarea).hidden(false).results().first();
+        SceneObject bones1 = SceneObjectQuery.newQuery().name("Bones").inside(graveyardarea).hidden(true).results().first();
         if(bones != null && !Backpack.isFull())
         {
-            println("Grabbing Bones: " + bones.interact("Grab"));
-            Execution.delay(random.nextLong(1250,1750));
+            if(bones.isHidden())
+            {println("Grabbing Bones: " + bones.interact("Grab"));
+                Execution.delay(random.nextLong(750,1250));}
+            else
+            {
+                println("Grabbing Bones Hidden False: " + bones.interact("Grab"));
+                Execution.delay(random.nextLong(750,1250));
+            }
         }
         else if(Backpack.isFull())
         {
             condepositbones();
         }
-        return random.nextLong(1250,1750);
+        return random.nextLong(750,1250);
     }
 
     public void condepositbones()
     {
         if(Backpack.contains(6905,6906,69007,6904))
         {
-            println(" Select Bones to Bananas Spell: " + MiniMenu.interact(SelectableAction.SELECTABLE_COMPONENT.getType(), 0,-1,109510761));
+            //println(" Select Bones to Bananas Spell: " + MiniMenu.interact(SelectableAction.SELECTABLE_COMPONENT.getType(), 0,-1,109510761));
+            println(" Action Bar Bones to Bananas Spell: " + ActionBar.useAbility("Bones to Bananas"));
             Execution.delay(random.nextLong(750,1850));
 
         }
